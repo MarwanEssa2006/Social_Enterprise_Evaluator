@@ -22,6 +22,16 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string; v:
     },
     locale,
   );
-  const pdf = await htmlToPdf(html);
-  return downloadResponse(pdf, `assessment-v${row.version}.pdf`, "application/pdf");
+  try {
+    const pdf = await htmlToPdf(html);
+    return downloadResponse(pdf, `assessment-v${row.version}.pdf`, "application/pdf");
+  } catch (e) {
+    // Hosts without Chromium (e.g., Vercel functions): serve the same report as a printable page.
+    console.error("PDF rendering unavailable; serving printable HTML", e instanceof Error ? e.message.slice(0, 200) : e);
+    const note = locale === "ar"
+      ? "توليد ملف PDF غير متاح على هذا الخادم. اطبع هذه الصفحة واحفظها PDF من المتصفح (Ctrl+P)."
+      : "PDF generation is not available on this server. Print this page and save it as PDF from your browser (Ctrl+P).";
+    const printable = html.replace("<body>", `<body><p style="background:#fff7e6;color:#7a4b00;padding:8px 12px;border-radius:6px;font-weight:600" class="no-print">${note}</p><style>@media print{.no-print{display:none}}</style>`);
+    return new Response(printable, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } });
+  }
 }

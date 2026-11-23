@@ -22,6 +22,9 @@ const en = {
     errInvalid: "Email or password is incorrect.", errThrottled: "Too many attempts. Please wait 15 minutes and try again.",
     errExists: "An account with this email already exists.", errValidation: "Please check the highlighted fields.",
     testDataNotice: "Prototype: please use test data only. Do not enter real personal or beneficiary data.",
+    demoBanner: "Demo mode: data is temporary and may be reset at any time.",
+    demoLogin: "Try the ready-made demo account:",
+    demoSignupNote: "New accounts and changes are temporary in demo mode and may disappear. For a stable try-out, use the demo account.",
   },
   dash: { title: "My projects", newProject: "New project", empty: "You have no projects yet. Create your first project to start the evaluation.", lastUpdated: "Last updated", versions: "Assessments", noAssessment: "Not assessed yet", archived: "Archived projects", open: "Open" },
   project: {
@@ -123,6 +126,9 @@ const ar: Dict = {
     errInvalid: "البريد الإلكتروني أو كلمة المرور غير صحيحة.", errThrottled: "محاولات كثيرة. انتظر 15 دقيقة ثم حاول مرة أخرى.",
     errExists: "يوجد حساب بهذا البريد الإلكتروني بالفعل.", errValidation: "يرجى مراجعة الحقول المطلوبة.",
     testDataNotice: "نسخة تجريبية: استخدم بيانات اختبارية فقط، ولا تُدخل بيانات شخصية أو بيانات مستفيدين حقيقية.",
+    demoBanner: "وضع تجريبي: البيانات مؤقتة وقد تُمسح في أي وقت.",
+    demoLogin: "جرّب الحساب التجريبي الجاهز:",
+    demoSignupNote: "الحسابات الجديدة والتعديلات مؤقتة في الوضع التجريبي وقد تختفي. للتجربة المستقرة استخدم الحساب التجريبي.",
   },
   dash: { title: "مشروعاتي", newProject: "مشروع جديد", empty: "لا توجد مشروعات بعد. أنشئ مشروعك الأول لبدء التقييم.", lastUpdated: "آخر تحديث", versions: "التقييمات", noAssessment: "لم يُقيَّم بعد", archived: "المشروعات المؤرشفة", open: "فتح" },
   project: {

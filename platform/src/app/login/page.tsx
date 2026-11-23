@@ -5,6 +5,7 @@ import { currentUser } from "@/lib/server/auth";
 import { AuthForm } from "@/components/forms";
 import { loginAction } from "../actions/session";
 import { Card, Notice } from "@/components/ui";
+import { DEMO_EMAIL, DEMO_PASSWORD, isDemoMode } from "@/lib/server/mode";
 
 export const metadata = { title: "Sign in" };
 
@@ -15,6 +16,13 @@ export default async function LoginPage() {
     <div className="mx-auto max-w-md">
       <h1 className="mb-6 text-2xl font-bold">{t.auth.loginTitle}</h1>
       <Notice kind="warn">{t.auth.testDataNotice}</Notice>
+      {isDemoMode() && (
+        <Notice>
+          {t.auth.demoLogin}{" "}
+          <span dir="ltr" className="font-mono font-semibold">{DEMO_EMAIL}</span> /{" "}
+          <span dir="ltr" className="font-mono font-semibold">{DEMO_PASSWORD}</span>
+        </Notice>
+      )}
       <Card>
         <AuthForm action={loginAction} mode="login" t={t.auth} />
       </Card>

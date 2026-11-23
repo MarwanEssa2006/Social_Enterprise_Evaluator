@@ -30,8 +30,8 @@ export interface RecEvidenceRow {
 const q = () => getDb();
 
 // ---------- Users & sessions ----------
-export function createUser(email: string, name: string, passwordHash: string, locale: string): UserRow {
-  const row: UserRow = { id: newId(), email: email.toLowerCase().trim(), name, password_hash: passwordHash, locale, created_at: now() };
+export function createUser(email: string, name: string, passwordHash: string, locale: string, fixedId?: string): UserRow {
+  const row: UserRow = { id: fixedId ?? newId(), email: email.toLowerCase().trim(), name, password_hash: passwordHash, locale, created_at: now() };
   q().prepare("INSERT INTO users (id,email,name,password_hash,locale,created_at) VALUES (?,?,?,?,?,?)")
     .run(row.id, row.email, row.name, row.password_hash, row.locale, row.created_at);
   return row;
@@ -59,8 +59,8 @@ export const deleteSession = (tokenHash: string) => q().prepare("DELETE FROM ses
 export interface ProjectInput {
   name: string; description: string; country: string; area: string; beneficiaryModel: BeneficiaryModel; grantsCoverCosts: boolean;
 }
-export function createProject(ownerId: string, p: ProjectInput): ProjectRow {
-  const id = newId();
+export function createProject(ownerId: string, p: ProjectInput, fixedId?: string): ProjectRow {
+  const id = fixedId ?? newId();
   const t = now();
   q().prepare(
     "INSERT INTO projects (id,owner_id,name,description,country,area,beneficiary_model,grants_cover_costs,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)",

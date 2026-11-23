@@ -125,18 +125,39 @@ export async function runAnalysis(
   });
   await Promise.all(workers);
 
-  // Final results generation: every selected recommendation appears exactly once, with its deterministic
-  // priority; personalised wording is attached only when it passed validation.
-  out.recommendations = selected.map((s) => {
-    const a = out.criteria[s.criterion];
+  out.recommendations = finalRecommendations(selected, out.criteria, o.lang);
+  return out;
+}
+
+/** Final results generation: every selected recommendation appears exactly once, with its deterministic
+ *  priority; personalised wording is attached only when it passed validation. */
+function finalRecommendations(selected: SelectedRecommendation[], criteria: AnalysisResult["criteria"], lang: Lang): FinalRecommendation[] {
+  return selected.map((s) => {
+    const a = criteria[s.criterion];
     const p = a?.recommendations.find((r) => r.library_key === s.key);
-    const fromAi = !!p && (a.status === "ai" || a.status === "mock");
     return {
       key: s.key, criterion: s.criterion, dimension: s.dimension, type: s.type, priority: s.priority,
       relatedQuestions: s.relatedQuestions, relatedFlags: s.relatedFlags, base: s.base,
-      personalised: p ? { lang: o.lang, weakness: p.weakness, action: p.action, steps: p.steps, expected_evidence: p.expected_evidence, source_ids: p.source_ids } : null,
-      source: fromAi && a.status === "ai" ? "ai" : "template",
+      personalised: p ? { lang, weakness: p.weakness, action: p.action, steps: p.steps, expected_evidence: p.expected_evidence, source_ids: p.source_ids } : null,
+      source: p && a.status === "ai" ? "ai" : "template",
     };
   });
+}
+
+/** Synchronous template-only analysis (no provider). Used to seed demo data at startup. */
+export function templateAnalysisSync(
+  result: AssessmentResult, answers: Answers, context: ProjectContext, evidence: EvidenceItemInput[],
+  selected: SelectedRecommendation[], lang: Lang,
+): AnalysisResult {
+  const out: AnalysisResult = {
+    lang, criteria: {}, recommendations: [],
+    meta: { provider: "mock", model: "mock-template-v1", promptVersion: PROMPT_VERSION, mode: "mock", perCriterion: {}, totalInputTokens: 0, totalOutputTokens: 0 },
+  };
+  for (const c of result.criteria) {
+    const { sheet } = buildFactSheet(c, answers, context, evidence, selected.filter((r) => r.criterion === c.id), lang);
+    out.criteria[c.id] = { ...templateAnalysis(sheet), status: "mock" };
+    out.meta.perCriterion[c.id] = { status: "mock", attempts: 0 };
+  }
+  out.recommendations = finalRecommendations(selected, out.criteria, lang);
   return out;
 }

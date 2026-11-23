@@ -49,11 +49,10 @@ See `.env.example`. Nothing is required for mock mode.
 
 ## Vercel
 - **Root Directory:** `platform`. Framework preset: Next.js. Node.js 22 or newer (needed for `node:sqlite`).
-- **Environment variables (minimum):** `DATABASE_PATH=/tmp/app.db`, `UPLOAD_DIR=/tmp/uploads`, `AI_MODE=mock`. Vercel's project folder is read-only; `/tmp` is writable.
-- **Current limits on Vercel (demo only):**
-  - The SQLite database in `/tmp` is temporary: accounts and projects disappear when Vercel restarts the function, and can differ between instances. For real use, move to a hosted database (e.g., PostgreSQL) — see `../ARCHITECTURE.md` §10.
-  - Uploaded evidence files are also temporary (`/tmp`).
-  - **PDF export does not work on Vercel** as built: it needs a full Chromium browser, which Vercel functions do not include. Excel export works.
+- **Demo mode** turns on automatically on Vercel (`VERCEL` env var). Each server instance creates a temporary database in the OS temp folder and seeds the same demo account and projects (fixed IDs); sessions are signed cookies, so sign-in works on every instance. The login page shows the demo credentials.
+- **Environment variables:** none required. Recommended: `SESSION_SECRET` = a long random string (signs session cookies).
+- **Limits of demo mode:** new accounts, projects, and changes live only in one temporary instance and can disappear; use the demo account for a stable try-out. For real use, move to a hosted database (e.g., PostgreSQL) — see `../ARCHITECTURE.md` §10.
+- **PDF:** Vercel functions have no Chromium, so the PDF link opens the same report as a printable page (save as PDF with Ctrl+P). Excel export works.
 - For a persistent deployment, use a host with a disk (any Node server/VPS) or adapt storage and PDF rendering for serverless.
 
 ## Guarantees enforced in code and tests

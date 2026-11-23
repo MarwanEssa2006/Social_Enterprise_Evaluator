@@ -1,7 +1,10 @@
 import "server-only";
 import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, join } from "node:path";
+import { tmpdir } from "node:os";
+import { isDemoMode } from "./mode";
+import { seedDemoData } from "./demo";
 
 // TD-02: SQLite via node:sqlite. Migrations are append-only.
 const MIGRATIONS: string[] = [
@@ -132,7 +135,9 @@ const MIGRATIONS: string[] = [
 let db: DatabaseSync | null = null;
 
 export function dbPath(): string {
-  return resolve(/*turbopackIgnore: true*/ process.env.DATABASE_PATH || "data/app.db");
+  // Demo mode on a read-only host: the only writable place is the OS temp folder.
+  const fallback = isDemoMode() ? join(tmpdir(), "sev-demo", "app.db") : "data/app.db";
+  return resolve(/*turbopackIgnore: true*/ process.env.DATABASE_PATH || fallback);
 }
 
 export function openDb(path = dbPath()): DatabaseSync {
@@ -161,7 +166,10 @@ export function migrate(d: DatabaseSync) {
 }
 
 export function getDb(): DatabaseSync {
-  if (!db) db = openDb();
+  if (!db) {
+    db = openDb();
+    if (isDemoMode()) seedDemoData(); // idempotent: same demo data on every instance
+  }
   return db;
 }
 

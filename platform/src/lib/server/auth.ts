@@ -4,14 +4,22 @@ import { redirect } from "next/navigation";
 import { hashToken, newSessionToken } from "./passwords";
 import { deleteSession, findSession, findUserById, getProjectForUser, insertSession, type ProjectRow, type UserRow } from "./repo";
 import { notFound } from "next/navigation";
+import { isDemoMode } from "./mode";
+import { sessionSecret, signSession, verifySession } from "./signed-session";
 
 export const SESSION_COOKIE = "sev_session";
 const SESSION_DAYS = 30;
 
 export async function startSession(userId: string) {
-  const token = newSessionToken();
   const expires = new Date(Date.now() + SESSION_DAYS * 86400_000);
-  insertSession(hashToken(token), userId, expires.toISOString());
+  let token: string;
+  if (isDemoMode()) {
+    // Demo mode: signed cookie, valid on every server instance (no shared session table).
+    token = signSession(userId, expires.getTime(), sessionSecret());
+  } else {
+    token = newSessionToken();
+    insertSession(hashToken(token), userId, expires.toISOString());
+  }
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
@@ -24,13 +32,17 @@ export async function startSession(userId: string) {
 export async function endSession() {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
-  if (token) deleteSession(hashToken(token));
+  if (token && !isDemoMode()) deleteSession(hashToken(token));
   jar.delete(SESSION_COOKIE);
 }
 
 export async function currentUser(): Promise<UserRow | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
+  if (isDemoMode()) {
+    const userId = verifySession(token, sessionSecret());
+    return userId ? (findUserById(userId) ?? null) : null;
+  }
   const s = findSession(hashToken(token));
   if (!s) return null;
   if (new Date(s.expires_at).getTime() < Date.now()) {

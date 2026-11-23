@@ -1,6 +1,8 @@
 import "server-only";
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { join, resolve, extname } from "node:path";
+import { tmpdir } from "node:os";
+import { isDemoMode } from "./mode";
 
 // TD-23: allow-listed types, 5 MB limit, random names, stored outside public/.
 export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -25,7 +27,8 @@ const SIGNATURES: Record<string, number[][]> = {
 };
 
 export function uploadDir() {
-  return resolve(/*turbopackIgnore: true*/ process.env.UPLOAD_DIR || "data/uploads");
+  const fallback = isDemoMode() ? join(/*turbopackIgnore: true*/ tmpdir(), "sev-demo", "uploads") : "data/uploads";
+  return resolve(/*turbopackIgnore: true*/ process.env.UPLOAD_DIR || fallback);
 }
 
 export interface StoredFile { file_name: string; file_path: string; file_mime: string; file_size: number }

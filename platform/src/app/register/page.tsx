@@ -5,6 +5,7 @@ import { currentUser } from "@/lib/server/auth";
 import { AuthForm } from "@/components/forms";
 import { registerAction } from "../actions/session";
 import { Card, Notice } from "@/components/ui";
+import { isDemoMode } from "@/lib/server/mode";
 
 export const metadata = { title: "Create account" };
 
@@ -15,6 +16,7 @@ export default async function RegisterPage() {
     <div className="mx-auto max-w-md">
       <h1 className="mb-6 text-2xl font-bold">{t.auth.registerTitle}</h1>
       <Notice kind="warn">{t.auth.testDataNotice}</Notice>
+      {isDemoMode() && <Notice>{t.auth.demoSignupNote}</Notice>}
       <Card>
         <AuthForm action={registerAction} mode="register" t={t.auth} />
       </Card>

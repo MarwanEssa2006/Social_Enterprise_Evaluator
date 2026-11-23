@@ -5,6 +5,7 @@ import { getDict } from "@/lib/i18n/server";
 import { currentUser } from "@/lib/server/auth";
 import { logoutAction, switchLocaleAction } from "./actions/session";
 import { headers } from "next/headers";
+import { isDemoMode } from "@/lib/server/mode";
 
 export const metadata: Metadata = {
   title: { default: "Social Enterprise Evaluator", template: "%s · Social Enterprise Evaluator" },
@@ -54,6 +55,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </nav>
           </div>
         </header>
+        {isDemoMode() && (
+          <div role="note" className="bg-warn-soft px-4 py-2 text-center text-sm font-semibold text-warn-ink">{t.auth.demoBanner}</div>
+        )}
         <main id="main" className="mx-auto w-full min-w-0 max-w-6xl flex-1 px-4 py-6 sm:py-8">
           {children}
         </main>

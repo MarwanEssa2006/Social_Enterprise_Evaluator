@@ -1,0 +1,25 @@
+# Dependencies and builds
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Local data (database, uploads) and test output
+platform/data/
+data/
+test-results/
+playwright-report/
+coverage/
+
+# Local tooling
+.claude/
+.vercel/
+.DS_Store
+npm-debug.log*

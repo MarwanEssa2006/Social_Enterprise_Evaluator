@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/* TD-06: light, calm theme; system fonts with Arabic coverage (no network font download). */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #18212b;
+  --muted: #5b6673;
+  --line: #dfe3e8;
+  --brand: #0f6b5c;
+  --brand-ink: #ffffff;
+  --brand-soft: #e3f2ef;
+  --com: #1f4fa3;
+  --com-soft: #e7eefa;
+  --soc: #7a3e9d;
+  --soc-soft: #f3eaf8;
+  --s5: #1c7c45;
+  --s4: #4d8f2f;
+  --s3: #b07a10;
+  --s2: #c4561c;
+  --s1: #b3261e;
+  --ns: #6b7280;
+  --warn-soft: #fff7e6;
+  --warn-ink: #7a4b00;
+  --danger-soft: #fdecea;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-com: var(--com);
+  --color-com-soft: var(--com-soft);
+  --color-soc: var(--soc);
+  --color-soc-soft: var(--soc-soft);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: "Segoe UI", Tahoma, "Noto Sans Arabic", "Noto Sans", system-ui, sans-serif;
+}
+
+/* Base rules live in @layer base so Tailwind utility classes can override them. */
+@layer base {
+  html { background: var(--bg); color: var(--ink); }
+  body { font-family: var(--font-sans); line-height: 1.6; }
+  :focus-visible { outline: 3px solid #f2b705; outline-offset: 2px; border-radius: 4px; }
+  a { color: inherit; }
+}
+
+.score-5 { background: var(--s5); color: #fff; }
+.score-4 { background: var(--s4); color: #fff; }
+.score-3 { background: var(--s3); color: #fff; }
+.score-2 { background: var(--s2); color: #fff; }
+.score-1 { background: var(--s1); color: #fff; }
+.score-ns { background: repeating-linear-gradient(45deg, #eef0f3, #eef0f3 6px, #e2e5ea 6px, #e2e5ea 12px); color: var(--ns); }
+.score-na { background: #f1f2f4; color: var(--ns); border: 1px dashed #c3c8cf; }
+
+@media print {
+  header, footer, .no-print { display: none !important; }
+}

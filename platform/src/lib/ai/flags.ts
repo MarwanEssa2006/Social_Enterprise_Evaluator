@@ -1,0 +1,30 @@
+import type { FlagKey } from "../scoring/types";
+
+/** Plain-language meanings for flags, given to the AI and shown in the UI. */
+export const FLAG_TEXT: Record<FlagKey, { en: string; ar: string }> = {
+  provisional_qualifier_unknown: { en: "a supporting answer in this dimension is unknown, so the result is provisional", ar: "إجابة مساندة في هذا البعد غير معروفة، لذا النتيجة مبدئية" },
+  adverse_anchor_inconsistency: { en: "the main answer is adverse but another answer claims a positive situation; the adverse main answer was used", ar: "الإجابة الأساسية سلبية بينما إجابة أخرى تشير إلى وضع إيجابي؛ تم الاعتماد على الإجابة الأساسية" },
+  inconsistency: { en: "answers in this dimension are not fully consistent", ar: "إجابات هذا البعد غير متسقة تماماً" },
+  payer_not_identified: { en: "the paying group is not identified", ar: "الفئة التي تدفع غير محددة" },
+  beneficiary_group_not_defined: { en: "the beneficiary group is not defined", ar: "الفئة المستفيدة غير محددة" },
+  geography_missing: { en: "the target country or area is missing from project information", ar: "الدولة أو المنطقة المستهدفة غير مذكورة في بيانات المشروع" },
+  evidence_basis_unknown: { en: "the basis of the size estimates is unknown", ar: "أساس تقدير الأحجام غير معروف" },
+  implausible_vs_population: { en: "the stated count is larger than the attached population of the area", ar: "العدد المذكور أكبر من عدد سكان المنطقة المرفق" },
+  grant_dependent: { en: "grants or donations cover part of costs while the commercial margin position is weak", ar: "المنح أو التبرعات تغطي جزءاً من التكاليف بينما وضع الهامش التجاري ضعيف" },
+  overheads_or_volume: { en: "the margin per sale is positive but does not cover running costs", ar: "الهامش لكل عملية بيع موجب لكنه لا يغطي المصروفات الجارية" },
+  untapped_recurring_need: { en: "customers' need recurs but revenue is one-off", ar: "احتياج العملاء يتكرر لكن الإيراد لمرة واحدة" },
+  single_supplier: { en: "production depends on a single main supplier", ar: "الإنتاج يعتمد على مورد أساسي واحد" },
+  import_dependency: { en: "inputs depend on imports or hard-to-reach sources", ar: "الخامات تعتمد على الاستيراد أو مصادر يصعب الوصول إليها" },
+  heterogeneous_skills: { en: "beneficiaries' skills vary widely", ar: "مهارات المستفيدين متفاوتة بشكل كبير" },
+  non_technical_team_only: { en: "the team's main capability is not product-related technical expertise", ar: "القدرة الأساسية للفريق ليست خبرة فنية مرتبطة بالمنتج" },
+  single_intermediary: { en: "access to customers depends on a single intermediary", ar: "الوصول إلى العملاء يعتمد على وسيط واحد" },
+  consent_verification: { en: "beneficiary stories are shown without their direct participation; consent must be checked", ar: "قصص المستفيدين تُعرض دون مشاركتهم المباشرة؛ يجب مراجعة الموافقة" },
+  guardian_consent: { en: "beneficiaries are minors; guardian consent is required for any story", ar: "المستفيدون قُصَّر؛ موافقة أولياء الأمور مطلوبة لأي قصة" },
+  appeal_untested: { en: "the story's appeal has not been tested", ar: "لم يتم اختبار جاذبية القصة" },
+  supporter_appeal_only: { en: "the story mainly attracts partners or supporters rather than customers", ar: "القصة تجذب الشركاء أو الداعمين أكثر من العملاء" },
+  impact_expected_not_visible: { en: "impact is expected but not yet visible", ar: "الأثر متوقع لكنه لم يظهر بعد" },
+  mission_preservation: { en: "adoption by another organisation needs safeguards for the social mission", ar: "تبني جهة أخرى للمشروع يحتاج ضمانات للحفاظ على الرسالة الاجتماعية" },
+  plan_without_counterpart: { en: "a continuity pathway is chosen but no counterpart organisation is identified", ar: "تم اختيار مسار للاستمرار دون تحديد جهة مقابلة" },
+  model_conflict: { en: "the recorded beneficiary model says beneficiaries do not earn, but answers indicate they do", ar: "نموذج المستفيدين المسجَّل يشير إلى أنهم لا يحققون دخلاً، لكن الإجابات تشير إلى غير ذلك" },
+  delayed_beneficiary_income: { en: "beneficiaries need significant time or investment before earning adequately", ar: "يحتاج المستفيدون وقتاً أو استثماراً كبيراً قبل تحقيق دخل مناسب" },
+};
